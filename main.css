@@ -382,6 +382,12 @@ body::after {
     position: absolute; top: 42%; left: 50%;
     transform: translate(-50%, -50%);
     text-align: center; width: 100%; z-index: 10;
+    pointer-events: none;
+}
+
+/* tambah ini langsung di bawahnya */
+#welcome-screen .quick-chip {
+    pointer-events: auto;
 }
 .logo-img {
     width: 200px; height: auto;
