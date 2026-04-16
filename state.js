@@ -23,12 +23,6 @@ const AppState = {
     labelAktif:    _modelPref.label    || 'Gemini Flash',
 
     // Ollama
-    ollamaModelAktif: _modelPref.ollamaModel || 'glm-5.1',
-    ollamaModelsList: [],
-
-    // File & gambar upload
-
-    // Ollama
     ollamaModelAktif: _modelPref.ollamaModel || _ollamaDefault,
     ollamaModelsList: [],
 
@@ -43,10 +37,8 @@ const AppState = {
     pinnedOpen:              true,
     suppressHistoryClickUntil: 0,
     contextTargetIdx:        -1,
-    riwayatAktifDibuka:   { get: () => AppState.riwayatAktifDibuka,   set: v => setState({ riwayatAktifDibuka: v }),   configurable: true },
-    ollamaModelAktif:     { get: () => AppState.ollamaModelAktif,     set: v => setState({ ollamaModelAktif: v }),     configurable: true },
-    ollamaModelsList:     { get: () => AppState.ollamaModelsList,     set: v => setState({ ollamaModelsList: v }),     configurable: true },
-});
+    riwayatAktifDibuka:      false,
+};
 
 // ── SATU FUNGSI UPDATE ──
 // Semua kode yang ingin mengubah state WAJIB lewat sini.
@@ -75,5 +67,7 @@ Object.defineProperties(window, {
     pinnedOpen:       { get: () => AppState.pinnedOpen,       set: v => setState({ pinnedOpen: v }),       configurable: true },
     suppressHistoryClickUntil: { get: () => AppState.suppressHistoryClickUntil, set: v => setState({ suppressHistoryClickUntil: v }), configurable: true },
     contextTargetIdx: { get: () => AppState.contextTargetIdx, set: v => setState({ contextTargetIdx: v }), configurable: true },
-    riwayatAktifDibuka: { get: () => AppState.riwayatAktifDibuka, set: v => setState({ riwayatAktifDibuka: v }), configurable: true },
+    riwayatAktifDibuka:  { get: () => AppState.riwayatAktifDibuka,  set: v => setState({ riwayatAktifDibuka: v }),  configurable: true },
+    ollamaModelAktif:    { get: () => AppState.ollamaModelAktif,    set: v => setState({ ollamaModelAktif: v }),    configurable: true },
+    ollamaModelsList:    { get: () => AppState.ollamaModelsList,    set: v => setState({ ollamaModelsList: v }),    configurable: true },
 });
