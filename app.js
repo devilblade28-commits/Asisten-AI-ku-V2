@@ -258,6 +258,46 @@ document.getElementById('btnHapusImg').addEventListener('click', () => {
     document.getElementById('imgPreviewThumb').src = '';
 });
 
+// ── OLLAMA BAR ──
+
+function updateOllamaBar() {
+    const bar = document.getElementById('ollamaBar');
+    const sel = document.getElementById('ollamaModelSelect');
+    if (AppState.providerAktif !== 'ollama') { bar.style.display = 'none'; return; }
+    bar.style.display = 'flex';
+    if (AppState.ollamaModelsList.length === 0) {
+        fetch('/api/ollama/models')
+            .then(r => r.json())
+            .then(data => {
+                AppState.ollamaModelsList = data.models || [];
+                isiOllamaSelect();
+            })
+            .catch(() => showToast('Gagal ambil daftar model Ollama'));
+    } else {
+        isiOllamaSelect();
+    }
+}
+
+function isiOllamaSelect() {
+    const sel = document.getElementById('ollamaModelSelect');
+    sel.innerHTML = '';
+    AppState.ollamaModelsList.forEach(m => {
+        const opt = document.createElement('option');
+        opt.value = m.name;
+        opt.textContent = m.name + (m.desc ? ' — ' + m.desc : '');
+        if (m.name === AppState.ollamaModelAktif) opt.selected = true;
+        sel.appendChild(opt);
+    });
+}
+
+document.getElementById('ollamaModelSelect').addEventListener('change', (e) => {
+    AppState.ollamaModelAktif = e.target.value;
+    simpanModelPref({ mode: AppState.modeAktif, provider: AppState.providerAktif, label: AppState.labelAktif, ollamaModel: AppState.ollamaModelAktif });
+});
+
+// Jalankan saat load
+updateOllamaBar();
+
 document.getElementById('btnHapusFile').addEventListener('click', () => {
     AppState.fileContent = null; AppState.fileName = null; AppState.persistedFile = null;
     simpanFilePersisten(null);
