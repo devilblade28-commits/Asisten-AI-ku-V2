@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Rehana AI</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <!-- App Styles -->
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+<div class="app-container">
+
+    <!-- HEADER -->
+    <div class="top-header">
+        <div class="hamburger-icon" id="btnMenu">☰</div>
+        <div class="model-selector" id="tombolDropdown">
+            <span id="teksModeTampil">Funixx AI</span>
+            <span class="dropdown-icon">▼</span>
+            <div class="dropdown-menu" id="menuDropdown">
+                <div class="dropdown-item" data-mode="instan" data-provider="gemini">⚡ Gemini Flash</div>
+                <div class="dropdown-item" data-mode="thinking" data-provider="gemini">🤔 Gemini Thinking</div>
+                <div class="dropdown-item" data-mode="claude" data-provider="claude">✨ Claude Sonnet</div>
+            <div class="dropdown-item" data-mode="ollama" data-provider="ollama">🦙 Ollama (Lokal)</div>
+</div>
+        </div>
+    </div>
+
+<!-- OLLAMA MODEL SELECTOR — hanya muncul saat provider = ollama -->
+<div class="ollama-bar" id="ollamaBar" style="display:none;">
+    <span class="ollama-bar-label">🦙 Model:</span>
+    <select class="ollama-model-select" id="ollamaModelSelect"></select>
+</div>
+
+<!-- SIDEBAR -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="sidebar" id="sidebarMenu">
+        <div class="sidebar-header">
+            <div class="sidebar-title">Funixx AI</div>
+        </div>
+        <div class="sidebar-body">
+            <div class="menu-item" id="btnPengaturan">⚙️ Pengaturan <span style="color:var(--muted);font-size:0.8rem;">▼</span></div>
+            <div class="submenu" id="submenuPengaturan">
+                <div class="submenu-item" id="btnBukaMemori">🧠 Memori Tersimpan</div>
+                <div class="submenu-item" id="btnBukaSettings">🔑 API Key</div>
+            </div>
+            <div class="riwayat-section">
+                <div class="riwayat-label">Riwayat Percakapan</div>
+                <div id="daftarRiwayatSidebar"></div>
+            </div>
+        </div>
+        <div class="sidebar-footer">
+            <button class="btn-chat-baru" id="btnChatBaru">✏️ Chat Baru</button>
+            <button class="btn-hapus-semua-riwayat" id="btnHapusSemua">🗑️ Hapus Semua Riwayat</button>
+        </div>
+    </div>
+
+    <!-- MODAL MEMORI -->
+    <div class="modal-full" id="modalMemori">
+        <div class="modal-header">
+            <button class="back-btn" id="tutupMemori">←</button>
+            <div class="modal-title">Memori Tersimpan</div>
+        </div>
+        <div class="memory-body">
+            <div class="add-memory-box">
+                <textarea id="inputMemoriBaru" placeholder="Tambah aturan permanen untuk AI..."></textarea>
+                <button class="btn-add" id="btnTambahMemori">Simpan</button>
+            </div>
+            <div class="memory-list" id="daftarMemori"></div>
+            <button class="btn-delete-all" id="btnHapusSemua2">Hapus semua memori</button>
+        </div>
+    </div>
+
+    <!-- MODAL RIWAYAT -->
+    <div class="modal-full" id="modalRiwayat">
+        <div class="modal-header">
+            <button class="back-btn" id="tutupRiwayat">←</button>
+            <div class="modal-title" id="judulRiwayatModal">Riwayat</div>
+        </div>
+        <div class="riwayat-modal-body" id="isiRiwayatModal"></div>
+        <div style="padding:12px 16px;border-top:1px solid var(--border);background:var(--surface);">
+            <button id="btnLanjutkanChat" style="width:100%;background:var(--accent);border:none;color:#fff;padding:13px;border-radius:var(--radius);font-size:0.95rem;font-weight:700;cursor:pointer;font-family:Nunito,sans-serif;transition:0.2s;">
+                ✏️ Lanjutkan Chat
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL SETTINGS -->
+    <div class="modal-full" id="modalSettings">
+        <div class="modal-header">
+            <button class="back-btn" id="tutupSettings">&#8592;</button>
+            <div class="modal-title">API Key</div>
+        </div>
+        <div class="settings-body">
+            <div class="settings-section">
+                <div class="settings-label">Gemini (Google AI Studio)</div>
+                <div class="settings-field">
+                    <label>API Key Gemini</label>
+                    <input type="password" class="settings-input" id="inputGeminiKey" placeholder="AIza...">
+                </div>
+                <div class="settings-hint">Ambil gratis di aistudio.google.com/apikey</div>
+            </div>
+            <div class="settings-section">
+                <div class="settings-label">Claude (enowxlabs)</div>
+                <div class="settings-field">
+                    <label>API Key Claude</label>
+                    <input type="password" class="settings-input" id="inputClaudeKey" placeholder="sk-...">
+                </div>
+                <div class="settings-field">
+                    <label>Base URL</label>
+                    <input type="text" class="settings-input" id="inputClaudeUrl" placeholder="https://api.enowxlabs.com/v1">
+                </div>
+            </div>
+<div class="settings-section">
+                <div class="settings-label">Ollama (Lokal)</div>
+                <div class="settings-field">
+                    <label>Base URL Ollama</label>
+                    <input type="text" class="settings-input" id="inputOllamaUrl" placeholder="http://localhost:11434">
+                </div>
+                <div class="settings-hint">Pastikan Ollama sudah berjalan & CORS diaktifkan</div>
+            </div>
+            <button class="btn-simpan-settings" id="btnSimpanSettings">Simpan API Key</button>
+        </div>
+    </div>
+
+    <!-- WELCOME -->
+    <div id="welcome-screen">
+        <img src="logo.png" alt="Funixx" class="logo-img" onerror="this.style.display='none'">
+        <div class="brand-name">Rehana AI</div>
+        <div class="brand-sub">Tanyakan apapun</div>
+        <div class="quick-prompts">
+            <div class="quick-chip" onclick="pakaiQuickPrompt(this)">🐛 Debug kode saya</div>
+            <div class="quick-chip" onclick="pakaiQuickPrompt(this)">✍️ Bantu saya menulis</div>
+            <div class="quick-chip" onclick="pakaiQuickPrompt(this)">💡 Jelaskan konsep ini</div>
+            <div class="quick-chip" onclick="pakaiQuickPrompt(this)">🌐 Terjemahkan teks</div>
+        </div>
+    </div>
+
+    <!-- PINNED SECTION -->
+    <div class="pinned-section" id="pinnedSection">
+        <div class="pinned-header" onclick="togglePinnedSection()">
+            <span>📌 Pesan Disematkan</span>
+            <span id="pinnedToggleIcon">▲</span>
+        </div>
+        <div class="pinned-list" id="pinnedList"></div>
+    </div>
+
+    <!-- CHAT -->
+    <div class="chat-box" id="chatBox"></div>
+
+    <!-- INPUT -->
+    <div class="input-container">
+        <div class="file-preview" id="filePreview">
+            <span>&#128196;</span>
+            <span class="file-preview-name" id="filePreviewName"></span>
+            <button class="btn-hapus-file" id="btnHapusFile">&#10005;</button>
+        </div>
+        <div class="img-preview-wrap" id="imgPreviewWrap">
+            <img class="img-preview-thumb" id="imgPreviewThumb" src="" alt="preview">
+            <button class="btn-hapus-img" id="btnHapusImg">&#10005;</button>
+        </div>
+        <div class="input-wrapper">
+            <input type="file" id="fileInput" accept=".html,.htm,.txt,.js,.css,.json,.md,.ts,.jsx,.tsx,.py,.php,.java,.cpp,.c,.xml,.csv,.yaml,.yml,.png,.jpg,.jpeg,.webp,.gif">
+            <button class="file-btn" id="btnAttach">＋</button>
+            <textarea id="kolomTanya" placeholder="Tanya Funixx AI..." rows="1" autocomplete="off"></textarea>
+            <button class="send-btn" id="tombolKirim" title="Kirim">➤</button>
+        </div>
+    </div>
+
+    <!-- CONTEXT MENU RIWAYAT -->
+    <div class="context-menu" id="contextMenuRiwayat">
+        <div class="context-menu-item danger" id="btnHapusRiwayatCtx">🗑️ Hapus percakapan ini</div>
+    </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════
+     APP SCRIPTS — urutan load penting!
+     Fase 2+: ganti <script> inline di bawah
+     dengan file-file terpisah secara bertahap
+     ═══════════════════════════════════════════ -->
+
+<script src="js/storage.js"></script>
+<script src="js/state.js"></script>
+<script src="js/api.js"></script>
+<script src="js/render.js"></script>
+<script src="js/chat.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>
