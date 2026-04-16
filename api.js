@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════
-   api.js — Fase 5
+   api.js — Fase 5 (PERBAIKAN)
    Semua network call ke Gemini & Claude.
    Aturan ketat: ZERO DOM, ZERO document.getElementById.
    Input: payload + callbacks. Output: stream chunks via onChunk(delta).
@@ -272,6 +272,7 @@ async function streamGemini({ prompt, imgData, imgMime, mode, teksMemori, riwaya
 }
 
 // ── OLLAMA (via Backend Proxy) ──
+// PERBAIKAN: Path akses data yang konsisten + fallback yang benar
 
 async function streamOllama({ prompt, teksMemori, riwayatInfo, signal, onChunk }) {
     const systemContent = buatSystemPrompt(teksMemori, riwayatInfo.degraded, 'ollama');
@@ -311,9 +312,32 @@ async function streamOllama({ prompt, teksMemori, riwayatInfo, signal, onChunk }
         throw err;
     }
 
-    // Non-streaming: kirim seluruh konten sekaligus via onChunk
-    const content = resData.data?.message?.content || resData.data?.choices?.[0]?.message?.content || '';
-    if (content) onChunk(content);
+    // PERBAIKAN: Path akses yang konsisten - coba format wrapper dulu, lalu format native Ollama
+    // Backend wrapper format: { success: true, data: { message: { content: "..." } } }
+    // Ollama native format: { message: { content: "..." } }
+    let content = '';
+    
+    if (resData.data?.message?.content) {
+        content = resData.data.message.content;
+    } else if (resData.message?.content) {
+        // Format native Ollama
+        content = resData.message.content;
+    } else if (typeof resData.data === 'string') {
+        // Jika data langsung string
+        content = resData.data;
+    } else if (resData.data?.choices?.[0]?.message?.content) {
+        // Format OpenAI-kompatibel
+        content = resData.data.choices[0].message.content;
+    }
+
+    if (content && typeof content === 'string') {
+        onChunk(content);
+    } else {
+        // Jika tidak ada path yang cocok, throw error yang informatif
+        const err = new Error('Format respons Ollama tidak dikenali. Periksa backend API response structure.');
+        err.statusCode = 502;
+        throw err;
+    }
 }
 
 // ── STREAM CLAUDE ──
