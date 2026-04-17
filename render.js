@@ -663,6 +663,25 @@ function tutupContextMenu() {
     AppState.contextTargetIdx = -1;
 }
 
+// ── OLLAMA MODELS ──
+
+async function isiOllamaSelect() {
+    try {
+        const resp = await fetch('/api/ollama/models');
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        const data = await resp.json();
+        const models = data.models || [];
+        AppState.ollamaModelsList = models.map(m => m.name);
+        const select = document.getElementById('ollamaModelSelect');
+        select.innerHTML = AppState.ollamaModelsList
+            .map(m => `<option value="${m}" ${m === AppState.ollamaModelAktif ? 'selected' : ''}>${m}</option>`)
+            .join('');
+    } catch (err) {
+        console.error('Fetch Ollama models error:', err);
+        showToast('Gagal muat daftar model Ollama');
+    }
+}
+
 // ── INIT ──
 
 function muatSesiAktif() {
