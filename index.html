@@ -8,6 +8,7 @@
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&display=swap" rel="stylesheet">
 
     <!-- Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
@@ -87,8 +88,8 @@
             <div class="modal-title" id="judulRiwayatModal">Riwayat</div>
         </div>
         <div class="riwayat-modal-body" id="isiRiwayatModal"></div>
-        <div style="padding:12px 16px;border-top:1px solid var(--border);background:var(--surface);">
-            <button id="btnLanjutkanChat" style="width:100%;background:var(--accent);border:none;color:#fff;padding:13px;border-radius:var(--radius);font-size:0.95rem;font-weight:700;cursor:pointer;font-family:Nunito,sans-serif;transition:0.2s;">
+        <div style="padding:12px 16px;border-top:1px solid rgba(100,120,255,0.22);background:rgba(8,13,30,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);">
+            <button id="btnLanjutkanChat" style="width:100%;background:linear-gradient(135deg,#1a56ff 0%,#7c3aed 100%);border:none;color:#fff;padding:13px;border-radius:var(--radius);font-size:0.95rem;font-weight:700;cursor:pointer;font-family:Nunito,sans-serif;transition:0.2s;box-shadow:0 4px 16px rgba(124,58,237,0.3);">
                 ✏️ Lanjutkan Chat
             </button>
         </div>
@@ -134,10 +135,43 @@
 
     <!-- WELCOME -->
     <div id="welcome-screen">
-        <img src="logo.png" alt="Funixx" class="logo-img" onerror="this.style.display='none'">
-        <div class="brand-name">Rehana AI</div>
-        <div class="brand-sub">Tanyakan apapun</div>
-        <div class="quick-prompts">
+        <!-- Orb dekoratif -->
+        <div style="position:absolute;width:260px;height:260px;background:radial-gradient(circle,rgba(26,86,255,0.18) 0%,transparent 70%);border-radius:50%;top:-60px;left:50%;transform:translateX(-50%);filter:blur(50px);pointer-events:none;z-index:0;"></div>
+        <div style="position:absolute;width:200px;height:200px;background:radial-gradient(circle,rgba(124,58,237,0.18) 0%,transparent 70%);border-radius:50%;bottom:-40px;left:50%;transform:translateX(-50%);filter:blur(40px);pointer-events:none;z-index:0;"></div>
+
+        <!-- Logo SVG glass card -->
+        <div style="position:relative;z-index:1;width:88px;height:88px;margin:0 auto 24px;border-radius:24px;background:rgba(13,18,40,0.7);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1.5px solid rgba(130,100,255,0.35);box-shadow:0 0 28px rgba(124,58,237,0.25),0 0 60px rgba(26,86,255,0.1),inset 0 1px 0 rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:center;">
+            <svg width="48" height="48" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <line x1="30" y1="6"  x2="30" y2="18" stroke="#a5b4fc" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="30" y1="42" x2="30" y2="54" stroke="#a5b4fc" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="6"  y1="30" x2="18" y2="30" stroke="#a5b4fc" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="42" y1="30" x2="54" y2="30" stroke="#a5b4fc" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="13" y1="13" x2="21" y2="21" stroke="#c084fc" stroke-width="1.2" stroke-linecap="round"/>
+                <line x1="47" y1="13" x2="39" y2="21" stroke="#c084fc" stroke-width="1.2" stroke-linecap="round"/>
+                <line x1="13" y1="47" x2="21" y2="39" stroke="#c084fc" stroke-width="1.2" stroke-linecap="round"/>
+                <line x1="47" y1="47" x2="39" y2="39" stroke="#c084fc" stroke-width="1.2" stroke-linecap="round"/>
+                <polygon points="30,18 42,24 42,36 30,42 18,36 18,24" stroke="url(#wg)" stroke-width="1" fill="rgba(99,102,241,0.08)"/>
+                <circle cx="30" cy="30" r="5" fill="url(#wc)"/>
+                <circle cx="30" cy="8"  r="2" fill="#a5b4fc"/>
+                <circle cx="30" cy="52" r="2" fill="#a5b4fc"/>
+                <circle cx="8"  cy="30" r="2" fill="#a5b4fc"/>
+                <circle cx="52" cy="30" r="2" fill="#a5b4fc"/>
+                <defs>
+                    <linearGradient id="wg" x1="0" y1="0" x2="60" y2="60" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stop-color="#3b82f6"/>
+                        <stop offset="100%" stop-color="#a855f7"/>
+                    </linearGradient>
+                    <radialGradient id="wc" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" stop-color="#f0f4ff"/>
+                        <stop offset="100%" stop-color="#818cf8"/>
+                    </radialGradient>
+                </defs>
+            </svg>
+        </div>
+
+        <div class="brand-name" style="position:relative;z-index:1;">Rehana AI</div>
+        <div class="brand-sub" style="position:relative;z-index:1;">Tanyakan apapun</div>
+        <div class="quick-prompts" style="position:relative;z-index:1;">
             <div class="quick-chip" onclick="pakaiQuickPrompt(this)">🐛 Debug kode saya</div>
             <div class="quick-chip" onclick="pakaiQuickPrompt(this)">✍️ Bantu saya menulis</div>
             <div class="quick-chip" onclick="pakaiQuickPrompt(this)">💡 Jelaskan konsep ini</div>
